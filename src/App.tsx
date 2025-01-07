@@ -21,10 +21,17 @@ export default function App() {
     return (
         <Canvas>
             <ambientLight />
-            <Physics debug={true}>
+            <Physics>
                 <Rink />
                 <KeyboardControls map={keyboardMap}>
-                    <Ecctrl disableFollowCam={false} position={[0, 5, -10]}>
+                    <Ecctrl
+                        disableFollowCam={false}
+                        position={[0, 5, -10]}
+                        camCollision
+                        floatHeight={0}
+                        maxVelLimit={5}
+                        friction={0.01}
+                    >
                         <Player />
                     </Ecctrl>
                 </KeyboardControls>
@@ -35,50 +42,35 @@ export default function App() {
     );
 }
 
-const Plane = () => {
-    return (
-        <RigidBody type="fixed">
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-                <planeGeometry args={[30, 30]} />
-                <meshStandardMaterial color="hotpink" />
-            </mesh>
-        </RigidBody>
-    );
-};
-
 const Puck = () => {
     return (
-        <RigidBody type="dynamic" colliders="trimesh" mass={0.1} >
-            <mesh position={[0, 4, 0]}>
-                <sphereGeometry args={[0.3]} />
+        <RigidBody position={[0, 1, 0]} colliders="trimesh" enabledRotations={[false, false, false]} enabledTranslations={[true, false, true]}>
+            <mesh>
+                <cylinderGeometry args={[0.5, 0.5, 0.4, 32]} />
                 <meshStandardMaterial color="red" />
             </mesh>
         </RigidBody>
     );
-}
+};
 
 const Player = () => {
     return (
-        // <RigidBody>
         <mesh>
             <capsuleGeometry args={[0.3, 0.7, 3]} />
             <meshStandardMaterial color="blue" />
         </mesh>
-        // </RigidBody>
     );
 };
 
 const Rink = () => {
-    return (
-        <ModelWithCollision url="/rink.glb" />
-    );
-}
+    return <ModelWithCollision url="/rink.glb" />;
+};
 
-function ModelWithCollision({ url }: { url: string }) {
+function ModelWithCollision({ url }: Readonly<{ url: string }>) {
     const { scene } = useGLTF(url);
 
     return (
-        <RigidBody type="fixed" colliders="trimesh">
+        <RigidBody type="fixed" colliders="trimesh" friction={0.01} restitution={0.7} linearDamping={0} angularDamping={0}>
             <primitive object={scene} />
         </RigidBody>
     );
