@@ -2,11 +2,24 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: 'ScoreBoard';
+  src: url('/fonts/scoreboard.ttf') format('truetype');
+}
+
 html,
 body,
 #root {
   width: 100%;
   height: 100%;
   margin: 0;
+  font-family: 'ScoreBoard', sans-serif;
   padding: 0;
+}
+
+.score {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }

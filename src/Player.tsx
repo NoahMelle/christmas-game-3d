@@ -1,23 +1,24 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useKeyboardControls } from "@react-three/drei";
-import { useFrame, useThree, Vector3 } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
-import { useTh } from "leva/dist/declarations/src/styles";
 import { useControls } from "leva";
 
 export default function Player({
     color,
     startingPos,
     playerNumber,
-}: {
+    lastPuckReset,
+}: Readonly<{
     color: string;
-    startingPos: Vector3;
+    startingPos: React.RefObject<THREE.Vector3>;
     playerNumber: number;
-}) {
+    lastPuckReset: number;
+}>) {
     const ref = useRef<RapierRigidBody>(null!);
-    const [subscribeKeys, getKeys] = useKeyboardControls();
+    const [_, getKeys] = useKeyboardControls();
 
     const { camera } = useThree();
 
@@ -25,7 +26,7 @@ export default function Player({
         useCameraRotation: true,
     });
 
-    useFrame((state, dt) => {
+    useFrame((_, dt) => {
         let moveForward = false;
         let moveBackward = false;
         let moveLeft = false;
@@ -49,15 +50,24 @@ export default function Player({
             moveRight = p2MoveRight;
         }
 
-        // Get the player's rotation (quaternion) and compute the forward and right vectors
-
-        const quaternion = useCameraRotation ? camera.quaternion : ref.current?.rotation();
+        const quaternion = useCameraRotation
+            ? new THREE.Quaternion(
+                  camera.quaternion.x,
+                  camera.quaternion.y,
+                  camera.quaternion.z,
+                  camera.quaternion.w
+              )
+            : ref.current.rotation();
         const forward = new THREE.Vector3(0, 0, -1)
             .applyQuaternion(quaternion)
             .normalize();
+        forward.y = 0;
+        forward.normalize();
         const right = new THREE.Vector3(1, 0, 0)
             .applyQuaternion(quaternion)
             .normalize();
+        right.y = 0;
+        right.normalize();
 
         let impulse = new THREE.Vector3(0, 0, 0);
         const impulseStrength = 0.5 * dt;
@@ -75,10 +85,23 @@ export default function Player({
         );
     });
 
+    useEffect(() => {
+        ref.current?.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        ref.current?.setAngvel({ x: 0, y: 0, z: 0 }, true);
+        ref.current?.setTranslation(
+            {
+                x: startingPos.current?.x ?? 0,
+                y: startingPos.current?.y ?? 0,
+                z: startingPos.current?.z ?? 0,
+            },
+            true
+        );
+    }, [lastPuckReset]);
+
     return (
         <RigidBody
             ref={ref}
-            position={startingPos}
+            position={startingPos.current ?? new THREE.Vector3()}
             restitution={0.3}
             friction={0.7}
             linearDamping={0.5}

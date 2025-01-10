@@ -2,16 +2,30 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import * as THREE from 'three'
-import createStore from 'zustand'
-import { Canvas } from "@react-three/fiber";
+import * as THREE from "three";
+import createStore from "zustand";
+import { KeyboardControls } from "@react-three/drei";
+
+const keyboardMap = [
+    { name: "p1MoveForward", keys: ["KeyW"] },
+    { name: "p1MoveBackward", keys: ["KeyS"] },
+    { name: "p1MoveLeft", keys: ["KeyA"] },
+    { name: "p1MoveRight", keys: ["KeyD"] },
+
+    { name: "p2MoveForward", keys: ["ArrowUp"] },
+    { name: "p2MoveBackward", keys: ["ArrowDown"] },
+    { name: "p2MoveLeft", keys: ["ArrowLeft"] },
+    { name: "p2MoveRight", keys: ["ArrowRight"] },
+];
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <App />
+        <KeyboardControls map={keyboardMap}>
+                <App />
+        </KeyboardControls>
     </StrictMode>
 );
 
-export const useStore = createStore((set) => ({
+export const useStore = createStore(() => ({
     scene: new THREE.Scene(),
 }));
