@@ -49,29 +49,28 @@ export default function Rink({
             linearDamping={0}
             angularDamping={0}
         >
-            <group {...props} dispose={null} position={[0, 0, 0]}>
-                <group scale={[0.973, 0.694, 0.901]}>
-                    <mesh
-                        castShadow
-                        receiveShadow
-                        geometry={nodes.Cube001.geometry}
-                        material={materials.Material}
-                    />
-                    <mesh
-                        castShadow
-                        receiveShadow
-                        geometry={nodes.Cube001_1.geometry}
-                        material={materials.glass}
-                        material-transparent={true}
-                        material-opacity={0.1} // Adjust the opacity value as needed
-                    />
-                    <mesh
-                        castShadow
-                        receiveShadow
-                        geometry={nodes.Cube001_2.geometry}
-                        material={materials["Material.003"]}
-                    />
-                </group>
+            <group {...props} dispose={null} >
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.Cube001.geometry}
+                    material={materials.Material}
+                    material-reflectivity={1}
+                />
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.Cube001_1.geometry}
+                    material={materials.glass}
+                    material-transparent={true}
+                    material-opacity={0.1}
+                />
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.Cube001_2.geometry}
+                    material={materials["Material.003"]}
+                />
             </group>
         </RigidBody>
     );

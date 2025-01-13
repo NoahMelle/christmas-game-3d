@@ -2,6 +2,7 @@ import { CameraControls } from "@react-three/drei";
 import { Physics, RapierRigidBody } from "@react-three/rapier";
 import Rink from "./assets/Rink";
 import { Puck } from "./assets/Puck";
+import { Environment } from "@react-three/drei";
 import { Player } from "./assets/Player";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
