@@ -84,9 +84,8 @@ export default function Scene({
 
   return (
     <>
-      <directionalLight position={[2, 11, -3]} intensity={2} />
-      <ambientLight intensity={0.6} />
       <CameraControls makeDefault ref={cameraControlRef} />
+      <Environment preset="forest"  environmentIntensity={0.3} environmentRotation={[0,degToRad(45), 0]} />
       <Physics debug={debugPhysics}>
         <Rink
           lookPosLeft={lookPosLeft}
