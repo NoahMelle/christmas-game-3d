@@ -110,7 +110,7 @@ export default function Player({
             enabledRotations={[false, false, false]}
             rotation={[0, degToRad(90), 0]}
         >
-            <mesh>
+            <mesh castShadow receiveShadow>
                 <capsuleGeometry args={[0.3, 0.7, 3]} />
                 <meshStandardMaterial color={color} />
             </mesh>

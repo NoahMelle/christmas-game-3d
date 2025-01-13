@@ -30,7 +30,7 @@ export default function Scene({
     const lookPosRight = useRef(new Vector3());
     const rinkDimensions = useRef(new Vector3());
 
-    const startingDistance = useRef(10);
+    const startingDistance = useRef(9);
     const p1StartingPos = useRef(new Vector3(0, 2, startingDistance.current));
     const p2StartingPos = useRef(new Vector3(0, 2, -startingDistance.current));
 
@@ -92,13 +92,13 @@ export default function Scene({
                 <Goal
                     setScore={setScore}
                     player={"p1"}
-                    position={[0, 0.5, -10]}
+                    position={[0, 1.6, -9.5]}
                 />
                 <Goal
                     rotation={[0, degToRad(180), 0]}
                     setScore={setScore}
                     player={"p2"}
-                    position={[0, 0.5, 10]}
+                    position={[0, 1.6, 9.5]}
                 />
                 <Player
                     color="red"

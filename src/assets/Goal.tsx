@@ -13,10 +13,16 @@ import { GLTF } from "three-stdlib";
 
 type GLTFResult = GLTF & {
     nodes: {
-        Cube: THREE.Mesh;
+        Cylinder: THREE.Mesh;
+        Sphere: THREE.Mesh;
+        Sphere001: THREE.Mesh;
+        Sphere002: THREE.Mesh;
+        Sphere003: THREE.Mesh;
+        Plane001: THREE.Mesh;
     };
     materials: {
-        Material: THREE.MeshStandardMaterial;
+        ["Material.004"]: THREE.MeshStandardMaterial;
+        ["Material.002"]: THREE.MeshStandardMaterial;
     };
 };
 
@@ -32,11 +38,11 @@ export function Goal({
     player: "p1" | "p2";
 }>) {
     const { nodes, materials } = useGLTF("/goal.glb") as GLTFResult;
-    const rinkDimensions = new THREE.Vector3(1.863, 1, 0.681);
-    const colliderDimensions = rinkDimensions.clone().multiplyScalar(0.9);
 
     const handleIntersectionEnter = (e: CollisionPayload) => {
         const parent = e.colliderObject?.parent;
+
+        console.log(parent);
 
         if (!parent) {
             return;
@@ -45,6 +51,7 @@ export function Goal({
         const userData = parent.userData as { type: string };
 
         if (userData.type === "puck") {
+            console.log("goal!");
             setScore((prev: { p1: number; p2: number }) => ({
                 ...prev,
                 [player]: prev[player] + 1,
@@ -53,26 +60,58 @@ export function Goal({
     };
 
     return (
-        <RigidBody type="fixed" colliders="trimesh">
+        <RigidBody type="fixed" colliders="trimesh" >
             <group dispose={null} position={position} rotation={rotation}>
                 <mesh
                     castShadow
                     receiveShadow
-                    geometry={nodes.Cube.geometry}
-                    material={materials.Material}
-                    material-transparent
-                    material-opacity={0.5}
-                    position={[0, 1, 0]}
-                    scale={rinkDimensions}
+                    geometry={nodes.Cylinder.geometry}
+                    material={materials["Material.004"]}
+                    position={[0, 0.03, -0.328]}
+                    rotation={[0.624, 0, 0]}
+                    scale={[1, 1.351, 1]}
+                />
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.Sphere.geometry}
+                    material={materials["Material.004"]}
+                    position={[0, 1.114, 1.011]}
+                />
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.Sphere001.geometry}
+                    material={materials["Material.004"]}
+                    position={[0, -0.886, -0.989]}
+                    rotation={[-Math.PI / 2, 0, 0]}
+                />
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.Sphere002.geometry}
+                    material={materials["Material.004"]}
+                    position={[0, -0.886, 1.011]}
+                />
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.Sphere003.geometry}
+                    material={materials["Material.004"]}
+                    position={[0, 1.114, 0.451]}
+                />
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.Plane001.geometry}
+                    material={materials["Material.002"]}
+                    position={[0, 0.114, 0.011]}
+                    rotation={[0, 0, -Math.PI / 2]}
                 />
                 <CuboidCollider
-                    args={[
-                        colliderDimensions.x,
-                        colliderDimensions.y,
-                        colliderDimensions.z,
-                    ]}
-                    onIntersectionEnter={handleIntersectionEnter}
+                    args={[2, 1, 1]}
                     sensor
+                    onIntersectionEnter={handleIntersectionEnter}
                 />
             </group>
         </RigidBody>
