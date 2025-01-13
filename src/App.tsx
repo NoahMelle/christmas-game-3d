@@ -1,5 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { useEffect, useState } from "react";
+import Snowfall from "react-snowfall";
 import Scene from "./Scene";
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
                     {score.p1} - {score.p2}
                 </h1>
             </div>
+            <Snowfall color="rgba(255, 255, 255, 0.4)" />
             <Canvas>
                 <Scene
                     isOnLeft={isOnLeft}

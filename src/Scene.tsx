@@ -3,6 +3,7 @@ import { Physics, RapierRigidBody } from "@react-three/rapier";
 import Rink from "./assets/Rink";
 import { Puck } from "./assets/Puck";
 import Player from "./Player";
+import { Environment } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useEffect, useRef } from "react";
@@ -54,7 +55,8 @@ export default function Scene({
                 8,
                 isPuckOnLeft
                     ? rinkDimensions.current.z / 2
-                    : -rinkDimensions.current.z / 2            );
+                    : -rinkDimensions.current.z / 2
+            );
 
             const lookPos = isPuckOnLeft
                 ? lookPosLeft.current
@@ -84,8 +86,7 @@ export default function Scene({
 
     return (
         <>
-            <directionalLight position={[2, 11, -3]} intensity={2} />
-            <ambientLight intensity={0.6} />
+            <Environment preset="forest" environmentIntensity={.5} />
             <CameraControls makeDefault ref={cameraControlRef} />
             <Physics debug={debugPhysics}>
                 <Rink
