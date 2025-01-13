@@ -38,8 +38,8 @@ export default function Rink({
 
     rinkDimensions.current = size;
 
-    lookPosLeft.current = new THREE.Vector3(-size.x / 2, 0, -size.z / 2);
-    lookPosRight.current = new THREE.Vector3(-size.x / 2, 0, size.z / 2);
+    lookPosLeft.current = new THREE.Vector3(-size.x / 2, -4, -size.z / 2);
+    lookPosRight.current = new THREE.Vector3(-size.x / 2, -4, size.z / 2);
 
     return (
         <RigidBody

@@ -39,6 +39,8 @@ export function Goal({
 }>) {
     const { nodes, materials } = useGLTF("/goal.glb") as GLTFResult;
 
+    const COLLIDER_OFFSET = 0.1;
+
     const handleIntersectionEnter = (e: CollisionPayload) => {
         const parent = e.colliderObject?.parent;
 
@@ -60,7 +62,7 @@ export function Goal({
     };
 
     return (
-        <RigidBody type="fixed" colliders="trimesh" >
+        <RigidBody colliders={false} type="fixed">
             <group dispose={null} position={position} rotation={rotation}>
                 <mesh
                     castShadow
@@ -109,10 +111,14 @@ export function Goal({
                     rotation={[0, 0, -Math.PI / 2]}
                 />
                 <CuboidCollider
-                    args={[2, 1, 1]}
+                    args={[2 - COLLIDER_OFFSET, 1, 0]}
                     sensor
+                    position={[0, 0, 0.5]}
                     onIntersectionEnter={handleIntersectionEnter}
                 />
+                <CuboidCollider args={[0.1, 1, 1]} position={[1.95, 0, 0]} />
+                <CuboidCollider args={[0.1, 1, 1]} position={[-1.95, 0, 0]} />
+                <CuboidCollider args={[2.01, 1, 0.1]} position={[0, 0, -1]} />
             </group>
         </RigidBody>
     );

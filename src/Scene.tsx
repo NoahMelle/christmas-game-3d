@@ -8,6 +8,7 @@ import { Vector3 } from "three";
 import { useEffect, useRef } from "react";
 import { Goal } from "./assets/Goal";
 import { degToRad } from "three/src/math/MathUtils.js";
+import { useControls } from "leva";
 
 export default function Scene({
     isOnLeft,
@@ -30,6 +31,10 @@ export default function Scene({
     const lookPosRight = useRef(new Vector3());
     const rinkDimensions = useRef(new Vector3());
 
+    const { debugPhysics } = useControls({
+        debugPhysics: false,
+    });
+
     const startingDistance = useRef(9);
     const p1StartingPos = useRef(new Vector3(0, 2, startingDistance.current));
     const p2StartingPos = useRef(new Vector3(0, 2, -startingDistance.current));
@@ -48,9 +53,8 @@ export default function Scene({
                 rinkDimensions.current.x / 2,
                 8,
                 isPuckOnLeft
-                    ? rinkDimensions.current.z / 3
-                    : -rinkDimensions.current.z / 3
-            );
+                    ? rinkDimensions.current.z / 2
+                    : -rinkDimensions.current.z / 2            );
 
             const lookPos = isPuckOnLeft
                 ? lookPosLeft.current
@@ -83,7 +87,7 @@ export default function Scene({
             <directionalLight position={[2, 11, -3]} intensity={2} />
             <ambientLight intensity={0.6} />
             <CameraControls makeDefault ref={cameraControlRef} />
-            <Physics>
+            <Physics debug={debugPhysics}>
                 <Rink
                     lookPosLeft={lookPosLeft}
                     lookPosRight={lookPosRight}
@@ -92,13 +96,13 @@ export default function Scene({
                 <Goal
                     setScore={setScore}
                     player={"p1"}
-                    position={[0, 1.6, -9.5]}
+                    position={[0, 1.7, -9]}
                 />
                 <Goal
                     rotation={[0, degToRad(180), 0]}
                     setScore={setScore}
                     player={"p2"}
-                    position={[0, 1.6, 9.5]}
+                    position={[0, 1.6, 9]}
                 />
                 <Player
                     color="red"
