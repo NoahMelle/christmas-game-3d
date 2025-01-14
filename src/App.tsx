@@ -1,5 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { useEffect, useState } from "react";
+import LoadingWrapper from "./components/LoadingWrapper";
 import Snowfall from "react-snowfall";
 import Scene from "./Scene";
 
@@ -20,17 +21,25 @@ export default function App() {
                     {score.p1} - {score.p2}
                 </h1>
             </div>
-            <Snowfall color="rgba(255, 255, 255, 0.4)" />
-            <Canvas>
-                <Scene
-                    isOnLeft={isOnLeft}
-                    setIsOnLeft={setIsOnLeft}
-                    score={score}
-                    setScore={setScore}
-                    lastPuckReset={lastPuckReset}
-                    setLastPuckReset={setLastPuckReset}
-                />
-            </Canvas>
+            <Snowfall
+                color="rgba(255, 255, 255, 0.4)"
+                style={{
+                    width: "100vw",
+                    height: "100vh",
+                }}
+            />
+            <LoadingWrapper>
+                <Canvas>
+                    <Scene
+                        isOnLeft={isOnLeft}
+                        setIsOnLeft={setIsOnLeft}
+                        score={score}
+                        setScore={setScore}
+                        lastPuckReset={lastPuckReset}
+                        setLastPuckReset={setLastPuckReset}
+                    />
+                </Canvas>
+            </LoadingWrapper>
         </>
     );
 }

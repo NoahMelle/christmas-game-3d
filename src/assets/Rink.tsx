@@ -7,19 +7,22 @@ import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { RigidBody } from "@react-three/rapier";
 import React from "react";
+import { useControls } from "leva";
 
 type GLTFResult = GLTF & {
     nodes: {
-        Cube001: THREE.Mesh;
-        Cube001_1: THREE.Mesh;
-        Cube001_2: THREE.Mesh;
-    };
+      Cube608: THREE.Mesh
+      Cube608_1: THREE.Mesh
+      Cube608_2: THREE.Mesh
+    }
     materials: {
-        Material: THREE.MeshStandardMaterial;
-        glass: THREE.MeshStandardMaterial;
-        ["Material.003"]: THREE.MeshStandardMaterial;
-    };
-};
+      ['Material.001']: THREE.MeshStandardMaterial
+      ['glass.001']: THREE.MeshStandardMaterial
+      ['Material.002']: THREE.MeshStandardMaterial
+    }
+  }
+  
+  
 
 export default function Rink({
     lookPosLeft,
@@ -32,6 +35,32 @@ export default function Rink({
     rinkDimensions: React.MutableRefObject<THREE.Vector3>;
 }) {
     const { nodes, materials, scene } = useGLTF("/rink.glb") as GLTFResult;
+
+    const glassMaterialProps = useControls({
+        thickness: { value: 5, min: 0, max: 20 },
+        roughness: { value: 0, min: 0, max: 1, step: 0.1 },
+        clearcoat: { value: 1, min: 0, max: 1, step: 0.1 },
+        clearcoatRoughness: { value: 0, min: 0, max: 1, step: 0.1 },
+        transmission: { value: 1, min: 0.9, max: 1, step: 0.01 },
+        ior: { value: 1.25, min: 1, max: 2.3, step: 0.05 },
+        envMapIntensity: { value: 25, min: 0, max: 100, step: 1 },
+        color: "#000000",
+        attenuationTint: "#ffe79e",
+        attenuationDistance: { value: 0, min: 0, max: 1 },
+    });
+
+    const glassMaterial = new THREE.MeshPhysicalMaterial({
+        metalness: 0,
+        thickness: glassMaterialProps.thickness,
+        roughness: glassMaterialProps.roughness,
+        envMapIntensity: glassMaterialProps.envMapIntensity,
+        clearcoat: glassMaterialProps.clearcoat,
+        transparent: true,
+        transmission: glassMaterialProps.transmission,
+        // opacity:
+        ior: 5,
+        side: THREE.BackSide,
+    });
 
     const box = new THREE.Box3().setFromObject(scene);
     const size = box.getSize(new THREE.Vector3());
@@ -49,27 +78,18 @@ export default function Rink({
             linearDamping={0}
             angularDamping={0}
         >
-            <group {...props} dispose={null} >
+            <group {...props} dispose={null}>
                 <mesh
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.Cube001.geometry}
-                    material={materials.Material}
-                    material-reflectivity={1}
+                    geometry={nodes.Cube608.geometry}
+                    material={materials["Material.001"]}
                 />
                 <mesh
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.Cube001_1.geometry}
-                    material={materials.glass}
-                    material-transparent={true}
-                    material-opacity={0.1}
+                    geometry={nodes.Cube608_1.geometry}
+                    material={glassMaterial}
                 />
                 <mesh
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.Cube001_2.geometry}
-                    material={materials["Material.003"]}
+                    geometry={nodes.Cube608_2.geometry}
+                    material={materials["Material.002"]}
                 />
             </group>
         </RigidBody>
