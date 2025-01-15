@@ -1,0 +1,41 @@
+[
+  {
+    "name": "3D Models",
+    "contributors": [
+      {
+        "name": "Pepijn Bullens",
+        "link": "https://github.com/PepijnBullens/"
+      },
+      {
+        "name": "Noah Kamphuisen",
+        "link": "https://github.com/noahMelle/"
+      }
+    ]
+  },
+  {
+    "name": "Textures",
+    "contributors": [
+      {
+        "name": "Pepijn Bullens",
+        "link": "https://github.com/PepijnBullens/"
+      },
+      {
+        "name": "Noah Kamphuisen",
+        "link": "https://github.com/noahMelle/"
+      }
+    ]
+  },
+  {
+    "name": "Coding",
+    "contributors": [
+      {
+        "name": "Pepijn Bullens",
+        "link": "https://github.com/PepijnBullens/"
+      },
+      {
+        "name": "Noah Kamphuisen",
+        "link": "https://github.com/noahMelle/"
+      }
+    ]
+  }
+]
