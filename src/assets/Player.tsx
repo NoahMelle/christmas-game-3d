@@ -148,7 +148,7 @@ export function Player({
         if (rotateLeft) {
             if (rotationDirection !== RotationDirection.LEFT) {
                 stickRef.current?.applyTorqueImpulse(
-                    { x: 0, y: rotationSpeed, z: 0 },
+                    { x: 0, y: -rotationSpeed, z: 0 },
                     true
                 );
 
@@ -157,7 +157,7 @@ export function Player({
         } else if (rotateRight) {
             if (rotationDirection !== RotationDirection.RIGHT) {
                 stickRef.current?.applyTorqueImpulse(
-                    { x: 0, y: -rotationSpeed, z: 0 },
+                    { x: 0, y: rotationSpeed, z: 0 },
                     true
                 );
 

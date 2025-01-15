@@ -5,8 +5,7 @@ import Snowfall from "react-snowfall";
 import Scene from "./Scene";
 
 export default function App() {
-    const [isOnLeft, setIsOnLeft] = useState(true);
-    const [score, setScore] = useState({ p1: 0, p2: 0 });
+        const [score, setScore] = useState({ p1: 0, p2: 0 });
     const [lastPuckReset, setLastPuckReset] = useState(Date.now());
 
     useEffect(() => {
@@ -31,8 +30,6 @@ export default function App() {
             <LoadingWrapper>
                 <Canvas>
                     <Scene
-                        isOnLeft={isOnLeft}
-                        setIsOnLeft={setIsOnLeft}
                         score={score}
                         setScore={setScore}
                         lastPuckReset={lastPuckReset}

@@ -11,20 +11,18 @@ import { degToRad } from "three/src/math/MathUtils.js";
 import { useControls } from "leva";
 
 export default function Scene({
-    isOnLeft,
-    setIsOnLeft,
     score,
     setScore,
     lastPuckReset,
     setLastPuckReset,
 }: Readonly<{
-    isOnLeft: boolean;
-    setIsOnLeft: React.Dispatch<React.SetStateAction<boolean>>;
     score: { p1: number; p2: number };
     setScore: React.Dispatch<React.SetStateAction<{ p1: number; p2: number }>>;
     lastPuckReset: number;
     setLastPuckReset: React.Dispatch<React.SetStateAction<number>>;
 }>) {
+    const isOnLeft = useRef(true);
+
     const puckRef = useRef<RapierRigidBody | null>(null);
     const cameraControlRef = useRef<CameraControls | null>(null);
     const lookPosLeft = useRef(new Vector3());
@@ -48,7 +46,7 @@ export default function Scene({
         const { z } = puckRef.current.translation();
 
         const isPuckOnLeft = z > 0;
-        if (isPuckOnLeft !== isOnLeft) {
+        if (isPuckOnLeft !== isOnLeft.current) {
             const newMovePos = new Vector3(
                 rinkDimensions.current.x / 2,
                 8,
@@ -75,7 +73,7 @@ export default function Scene({
             );
         }
 
-        setIsOnLeft(z > 0);
+        isOnLeft.current = isPuckOnLeft;
     });
 
     useEffect(() => {

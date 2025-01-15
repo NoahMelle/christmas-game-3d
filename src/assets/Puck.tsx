@@ -50,6 +50,7 @@ export function Puck({
             enabledTranslations={[true, false, true]}
             ref={innerRef}
             colliders={false}
+            ccd={true}
         >
             <group {...props} dispose={null} position={[0, 0.8, 0]} userData={{ type: "puck" }}>
                 <mesh
