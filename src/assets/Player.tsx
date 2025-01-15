@@ -23,18 +23,26 @@ type GLTFResult = GLTF & {
     materials: {};
 };
 
+enum RotationDirection {
+    LEFT,
+    RIGHT,
+    NONE,
+}
+
 export function Player({
+    color,
     startingPos,
     playerNumber,
     lastPuckReset,
-    color,
 }: {
     color: string;
     startingPos: React.MutableRefObject<Vector3>;
     playerNumber: number;
     lastPuckReset: number;
 } & JSX.IntrinsicElements["group"]) {
-    const { nodes } = useGLTF("/player.glb") as unknown as GLTFResult;
+    const { nodes } = useGLTF(
+        "/player.glb"
+    ) as unknown as GLTFResult;
     const playerRef = useRef<RapierRigidBody>(null!);
     const stickRef = useRef<RapierRigidBody>(null!);
     const [_, getKeys] = useKeyboardControls();
@@ -44,8 +52,11 @@ export function Player({
         [0, 0, 0],
         [0, 0, 0],
         [0, 1, 0],
-        [0.4, 0.5],
     ]);
+    const [rotationDirection, setRotationDirection] =
+        React.useState<RotationDirection>(RotationDirection.NONE);
+
+    const material = new THREE.MeshStandardMaterial({ color: color });
 
     useFrame((_, dt) => {
         let moveForward = false;
@@ -86,7 +97,6 @@ export function Player({
             .applyQuaternion(quaternion)
             .normalize();
 
-        // Calculate movement impulse
         let impulse = new THREE.Vector3();
         const impulseStrength = 2 * dt;
 
@@ -112,7 +122,7 @@ export function Player({
             const currentQuaternion = new THREE.Quaternion().copy(
                 playerRef.current.rotation()
             );
-            currentQuaternion.slerp(targetQuaternion, 0.1); // Adjust 0.1 for more smoothness
+            currentQuaternion.slerp(targetQuaternion, 0.1);
             playerRef.current?.setRotation(
                 {
                     x: currentQuaternion.x,
@@ -124,13 +134,49 @@ export function Player({
             );
         }
 
+        const rotationSpeed = 4;
+
+        const treshhold = 3;
+
+        const yRotationVel = stickRef.current?.angvel().y;
+
+        if (yRotationVel < treshhold && yRotationVel > -treshhold) {
+            setRotationDirection(RotationDirection.NONE);
+        }
+
         // Stick rotation
-        if (rotateLeft)
-            stickRef.current?.setAngvel({ x: 0, y: 10, z: 0 }, true);
-        if (rotateRight)
-            stickRef.current?.setAngvel({ x: 0, y: -10, z: 0 }, true);
-        if (!rotateLeft && !rotateRight)
-            stickRef.current?.setAngvel({ x: 0, y: 0, z: 0 }, true);
+        if (rotateLeft) {
+            if (rotationDirection !== RotationDirection.LEFT) {
+                stickRef.current?.applyTorqueImpulse(
+                    { x: 0, y: -rotationSpeed, z: 0 },
+                    true
+                );
+
+                setRotationDirection(RotationDirection.LEFT);
+            }
+        } else if (rotateRight) {
+            if (rotationDirection !== RotationDirection.RIGHT) {
+                stickRef.current?.applyTorqueImpulse(
+                    { x: 0, y: rotationSpeed, z: 0 },
+                    true
+                );
+
+                setRotationDirection(RotationDirection.RIGHT);
+            }
+        }
+        if (!rotateLeft && !rotateRight) {
+            const angVel = stickRef.current?.angvel();
+            if (angVel) {
+                stickRef.current?.setAngvel(
+                    {
+                        x: angVel.x * 0.9,
+                        y: angVel.y * 0.9,
+                        z: angVel.z * 0.9,
+                    },
+                    true
+                );
+            }
+        }
     });
 
     useEffect(() => {
@@ -158,16 +204,14 @@ export function Player({
                         castShadow
                         receiveShadow
                         geometry={nodes.Cylinder.geometry}
-                        material={nodes.Cylinder.material}
-                        material-color={color}
+                        material={material}
                         position={[0, 0.903, 0]}
                     />
                     <mesh
                         castShadow
                         receiveShadow
                         geometry={nodes.Icosphere.geometry}
-                        material-color={color}
-                        material={nodes.Icosphere.material}
+                        material={material}
                         position={[0, 2.567, 0]}
                         scale={0.535}
                     />
@@ -175,8 +219,7 @@ export function Player({
                         castShadow
                         receiveShadow
                         geometry={nodes.Cube004.geometry}
-                        material={nodes.Cube004.material}
-                        material-color={color}
+                        material={material}
                         position={[0.283, -0.285, -0.053]}
                         rotation={[0, -0.11, 0]}
                         scale={[0.027, 0.032, 0.242]}
@@ -185,15 +228,14 @@ export function Player({
                         castShadow
                         receiveShadow
                         geometry={nodes.Cube003.geometry}
-                        material={nodes.Cube003.material}
+                        material={material}
                         position={[-0.278, -0.285, -0.053]}
-                        material-color={color}
                         rotation={[0, 0.187, 0]}
                         scale={[0.027, 0.032, 0.242]}
                     />
                 </group>
             </RigidBody>
-            <RigidBody ref={stickRef}>
+            <RigidBody ref={stickRef} >
                 <Stick />
             </RigidBody>
         </group>

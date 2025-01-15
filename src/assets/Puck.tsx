@@ -6,7 +6,11 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import React, { useEffect } from "react";
-import { RapierRigidBody, RigidBody } from "@react-three/rapier";
+import {
+    CylinderCollider,
+    RapierRigidBody,
+    RigidBody,
+} from "@react-three/rapier";
 
 type GLTFResult = GLTF & {
     nodes: {
@@ -17,8 +21,14 @@ type GLTFResult = GLTF & {
     };
 };
 
-export function Puck({ innerRef, lastPuckReset, ...props }: { innerRef: React.RefObject<RapierRigidBody>; lastPuckReset: number }) {
-
+export function Puck({
+    innerRef,
+    lastPuckReset,
+    ...props
+}: {
+    innerRef: React.RefObject<RapierRigidBody>;
+    lastPuckReset: number;
+}) {
     const { nodes, materials } = useGLTF("/puck.glb") as GLTFResult;
 
     useEffect(() => {
@@ -30,16 +40,29 @@ export function Puck({ innerRef, lastPuckReset, ...props }: { innerRef: React.Re
         }
     }, [lastPuckReset]);
 
-
     return (
-        <RigidBody mass={0.1} type="dynamic" friction={0.1} restitution={1.5} enabledRotations={[false, false, false]} enabledTranslations={[true, false, true]}  ref={innerRef} userData={{ type: "puck" }}>
-            <group {...props} dispose={null} position={[0, .8, 0]}>
+        <RigidBody
+            mass={0.1}
+            type="dynamic"
+            friction={0.1}
+            restitution={1.5}
+            enabledRotations={[false, false, false]}
+            enabledTranslations={[true, false, true]}
+            ref={innerRef}
+            colliders={false}
+            ccd={true}
+        >
+            <group {...props} dispose={null} position={[0, 0.8, 0]} userData={{ type: "puck" }}>
                 <mesh
                     castShadow
                     receiveShadow
                     geometry={nodes.Cylinder.geometry}
                     material={materials["Material.001"]}
                     scale={2.499}
+                />
+                <CylinderCollider
+                    position={[0, 0, 0]}
+                    args={[0.08, 0.4]}
                 />
             </group>
         </RigidBody>
