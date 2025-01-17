@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "./menu.module.scss";
 
 export default function Credits() {
     const [credits, setCredits] = useState<any[]>([]);
@@ -10,31 +11,27 @@ export default function Credits() {
             .catch((error) => console.error("Error fetching credits:", error));
     }, []);
 
-    useEffect(() => {
-        console.log(credits);
-    }, [credits]);
-
     return (
-        <ul>
+        <div className={styles.credits}>
             {credits.map((credit, index) => (
-                <li key={index}>
-                    <p className="credit-label">{credit.name}</p>
-                    <div>
+                <div key={index}>
+                    <p className={styles.creditLabel}>{credit.name}</p>
+                    <ul>
                         {credit.contributors.map(
                             (contributor: any, contributorIndex: number) => (
-                                <p
-                                    className="contributor-label"
+                                <li
+                                    className={styles.contributorLabel}
                                     key={index + " - " + contributorIndex}
                                 >
                                     <a href={contributor.link} target="_blank">
                                         {contributor.name}
                                     </a>
-                                </p>
+                                </li>
                             )
                         )}
-                    </div>
-                </li>
+                    </ul>
+                </div>
             ))}
-        </ul>
+        </div>
     );
 }

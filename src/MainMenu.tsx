@@ -15,8 +15,8 @@ export enum MenuState {
 }
 
 export interface PlayerColors {
-  p1: string,
-  p2: string
+    p1: string;
+    p2: string;
 }
 
 export default function EmptyScene({
@@ -57,23 +57,31 @@ export default function EmptyScene({
                 </Canvas>
             </Suspense>
             <Snowfall color="rgba(255, 255, 255, 0.4)" />
-            {currentMenuState === MenuState.Menu ? (
-                <Main
-                    setScene={setScene}
-                    setCurrentMenuState={setCurrentMenuState}
-                />
-            ) : (
-                <div className="menu-screen">
-                    {currentMenuState === MenuState.Credits ? (
-                        <Credits />
-                    ) : currentMenuState === MenuState.Settings ? (
-                        <Settings playerColors={playerColors} setPlayerColors={setPlayerColors} />
-                    ) : null}
-                    <button onClick={() => setCurrentMenuState(MenuState.Menu)}>
-                        Back
-                    </button>
-                </div>
-            )}
+            <div className={styles.menuContainer}>
+                {currentMenuState === MenuState.Menu ? (
+                    <Main
+                        setScene={setScene}
+                        setCurrentMenuState={setCurrentMenuState}
+                    />
+                ) : (
+                    <div className={styles.menuScreen}>
+                        {currentMenuState === MenuState.Credits ? (
+                            <Credits />
+                        ) : currentMenuState === MenuState.Settings ? (
+                            <Settings
+                                playerColors={playerColors}
+                                setPlayerColors={setPlayerColors}
+                            />
+                        ) : null}
+                        <button
+                            onClick={() => setCurrentMenuState(MenuState.Menu)}
+                            className={styles.menuButton}
+                        >
+                            Back
+                        </button>
+                    </div>
+                )}
+            </div>
         </>
     );
 }
@@ -88,7 +96,9 @@ const Main = ({
     return (
         <div className={styles.mainMenu}>
             <h1>GAME NAME</h1>
-            <button onClick={() => setScene(1)} className={styles.menuButton}>Play</button>
+            <button onClick={() => setScene(1)} className={styles.menuButton}>
+                Play
+            </button>
             <MenuButton
                 label="Settings"
                 targetState={MenuState.Settings}
@@ -113,7 +123,10 @@ const MenuButton = ({
     setCurrentMenuState: React.Dispatch<React.SetStateAction<MenuState>>;
 }) => {
     return (
-        <button onClick={() => setCurrentMenuState(targetState)} className={styles.menuButton}>
+        <button
+            onClick={() => setCurrentMenuState(targetState)}
+            className={styles.menuButton}
+        >
             {label}
         </button>
     );
