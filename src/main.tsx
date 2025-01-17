@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import MainMenu from "./MainMenu.tsx";
-import Credits from "./Credits.tsx";
 import * as THREE from "three";
 import createStore from "zustand";
 import { KeyboardControls } from "@react-three/drei";
@@ -32,19 +31,27 @@ enum GameScene {
 }
 
 function Main() {
-  const [scene, setScene] = useState(GameScene.Menu);
+    const [scene, setScene] = useState(GameScene.Menu);
+    const [playerColors, setPlayerColors] = useState({
+        p1: "#FF0000",
+        p2: "#0000FF",
+    });
 
-  return (
-    <StrictMode>
-      <KeyboardControls map={keyboardMap}>
-        {scene != GameScene.Game ? (
-          <MainMenu setScene={setScene} />
-        ) : (
-          <App setScene={setScene} />
-        )}
-      </KeyboardControls>
-    </StrictMode>
-  );
+    return (
+        <StrictMode>
+            <KeyboardControls map={keyboardMap}>
+                {scene != GameScene.Game ? (
+                    <MainMenu
+                        setScene={setScene}
+                        playerColors={playerColors}
+                        setPlayerColors={setPlayerColors}
+                    />
+                ) : (
+                    <App setScene={setScene} />
+                )}
+            </KeyboardControls>
+        </StrictMode>
+    );
 }
 
 createRoot(document.getElementById("root")!).render(<Main />);
