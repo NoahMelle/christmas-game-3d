@@ -1,13 +1,13 @@
 import React, { Suspense } from "react";
 
 export default function LoadingWrapper({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <Suspense fallback={<div className="loading">Loading...</div>}>
-            {children}
-        </Suspense>
-    );
+  return (
+    <Suspense fallback={<div className="loading">Loading...</div>}>
+      {children}
+    </Suspense>
+  );
 }
