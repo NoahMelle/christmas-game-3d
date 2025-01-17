@@ -7,40 +7,40 @@ import Scene from "./Scene";
 enum GamemodeState {
   Minutes,
   Points,
+  Winner,
 }
 
-export default function App() {
+export enum MenuState {
+  Menu,
+  Credits,
+}
+
+export default function App({
+  setScene,
+}: {
+  setScene: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const [score, setScore] = useState({ p1: 0, p2: 0 });
+  const [winner, setWinner] = useState<number | null>(null);
   const [lastPuckReset, setLastPuckReset] = useState(Date.now());
   const [currentGamemodeState, setCurrentGamemodeState] =
     useState<GamemodeState | null>(null);
+  const maxPointsWinner = 5;
 
   useEffect(() => {
     console.log(score);
     setLastPuckReset(Date.now());
+
+    if (currentGamemodeState === GamemodeState.Points) {
+      if (score.p1 >= maxPointsWinner || score.p2 >= maxPointsWinner) {
+        setWinner(score.p1 > score.p2 ? 1 : 2);
+        setCurrentGamemodeState(GamemodeState.Winner);
+      }
+    }
   }, [score]);
 
-  return currentGamemodeState === null ? (
+  return (
     <>
-      <GamemodeButton
-        label={"Minutes"}
-        targetState={GamemodeState.Minutes}
-        setCurrentGamemodeState={setCurrentGamemodeState}
-      />
-
-      <GamemodeButton
-        label={"Points"}
-        targetState={GamemodeState.Points}
-        setCurrentGamemodeState={setCurrentGamemodeState}
-      />
-    </>
-  ) : (
-    <>
-      <div className="score">
-        <h1>
-          {score.p1} - {score.p2}
-        </h1>
-      </div>
       <Snowfall
         color="rgba(255, 255, 255, 0.4)"
         style={{
@@ -49,12 +49,58 @@ export default function App() {
         }}
       />
       <LoadingWrapper>
-        <Canvas>
+        {currentGamemodeState === null ? (
+          <div className="gamemode-chooser">
+            <GamemodeButton
+              label={"Minutes"}
+              targetState={GamemodeState.Minutes}
+              setCurrentGamemodeState={setCurrentGamemodeState}
+            />
+
+            <GamemodeButton
+              label={"Points"}
+              targetState={GamemodeState.Points}
+              setCurrentGamemodeState={setCurrentGamemodeState}
+            />
+          </div>
+        ) : null}
+        {currentGamemodeState === GamemodeState.Points ? (
+          <div className="score">
+            <h1>
+              {score.p1} - {score.p2}
+            </h1>
+          </div>
+        ) : null}
+        {winner !== null ? (
+          <div className="win-screen">
+            <h2>Player: {winner} is the winner!</h2>
+            <button
+              onClick={() => {
+                setScene(MenuState.Menu);
+              }}
+            >
+              Back
+            </button>
+          </div>
+        ) : null}
+        <Canvas
+          style={{
+            filter:
+              currentGamemodeState === null || winner !== null
+                ? "blur(10px)"
+                : "",
+          }}
+        >
           <Scene
             score={score}
             setScore={setScore}
             lastPuckReset={lastPuckReset}
             setLastPuckReset={setLastPuckReset}
+            gameStarted={
+              currentGamemodeState === GamemodeState.Winner
+                ? false
+                : currentGamemodeState !== null
+            }
           />
         </Canvas>
       </LoadingWrapper>
@@ -74,7 +120,10 @@ const GamemodeButton = ({
   >;
 }) => {
   return (
-    <button onClick={() => setCurrentGamemodeState(targetState)}>
+    <button
+      className="gamemode-chooser-button"
+      onClick={() => setCurrentGamemodeState(targetState)}
+    >
       {label}
     </button>
   );
