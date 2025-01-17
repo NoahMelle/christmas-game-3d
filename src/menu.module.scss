@@ -1,0 +1,98 @@
+.settings {
+    .colorPicker {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        position: relative;
+        .current {
+            background-color: red;
+        }
+
+        .ball {
+            aspect-ratio: 1/1;
+            width: 10px;
+            border-radius: 100%;
+            &[data-color="red"] {
+                background-color: red;
+            }
+            &[data-color="orange"] {
+                background-color: orange;
+            }
+            &[data-color="yellow"] {
+                background-color: yellow;
+            }
+            &[data-color="green"] {
+                background-color: green;
+            }
+            &[data-color="blue"] {
+                background-color: blue;
+            }
+            &[data-color="purple"] {
+                background-color: purple;
+            }
+        }
+
+        .topContainer {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .popup {
+            position: absolute;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            left: 0;
+            top: 100%;
+            margin-top: 1rem;
+            .balls {
+                display: flex;
+                gap: 0.5rem;
+                .ball:not(.selected) {
+                    opacity: 0.5;
+                }
+            }
+        }
+    }
+}
+
+.mainMenu,
+.menuScreen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    .menuButton {
+        background-color: black;
+        color: white;
+        border: 4px solid white;
+        padding: 1rem 2rem;
+        cursor: pointer;
+        width: 100%;
+        border-radius: 10px;
+        transition: all 0.2s;
+        font-size: 1.2rem;
+        margin: 0;
+        font-family: "ScoreBoard", sans-serif;
+        letter-spacing: 8px;
+        font-weight: bold;
+        &:hover {
+            background-color: white;
+            color: black;
+        }
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+        width: 800px;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 2rem;
+        border: 4px solid white;
+        border-radius: 10px;
+    }
+}

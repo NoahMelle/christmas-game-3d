@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { MenuState } from "./MainMenu";
+import { useEffect, useState } from "react";
 
-export default function Credits({
-    setCurrentMenuState,
-}: {
-    setCurrentMenuState: React.Dispatch<React.SetStateAction<MenuState>>;
-}) {
+export default function Credits() {
     const [credits, setCredits] = useState<any[]>([]);
 
     useEffect(() => {
@@ -20,41 +15,26 @@ export default function Credits({
     }, [credits]);
 
     return (
-        <>
-            <div className="credits">
-                <ul>
-                    {credits.map((credit, index) => (
-                        <li key={index}>
-                            <p className="credit-label">{credit.name}</p>
-                            <div>
-                                {credit.contributors.map(
-                                    (
-                                        contributor: any,
-                                        contributorIndex: number
-                                    ) => (
-                                        <p
-                                            className="contributor-label"
-                                            key={
-                                                index + " - " + contributorIndex
-                                            }
-                                        >
-                                            <a
-                                                href={contributor.link}
-                                                target="_blank"
-                                            >
-                                                {contributor.name}
-                                            </a>
-                                        </p>
-                                    )
-                                )}
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-                <button onClick={() => setCurrentMenuState(MenuState.Menu)}>
-                    <p>Back</p>
-                </button>
-            </div>
-        </>
+        <ul>
+            {credits.map((credit, index) => (
+                <li key={index}>
+                    <p className="credit-label">{credit.name}</p>
+                    <div>
+                        {credit.contributors.map(
+                            (contributor: any, contributorIndex: number) => (
+                                <p
+                                    className="contributor-label"
+                                    key={index + " - " + contributorIndex}
+                                >
+                                    <a href={contributor.link} target="_blank">
+                                        {contributor.name}
+                                    </a>
+                                </p>
+                            )
+                        )}
+                    </div>
+                </li>
+            ))}
+        </ul>
     );
 }

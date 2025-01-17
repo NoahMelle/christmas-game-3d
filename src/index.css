@@ -28,7 +28,7 @@ body,
 }
 
 .main-menu,
-.credits {
+.menu-screen {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -38,7 +38,7 @@ body,
     gap: 1rem;
 }
 
-.credits button {
+.menu-screen button {
     background-color: black;
     color: white;
     border: 4px solid white;
@@ -54,7 +54,7 @@ body,
     font-weight: bold;
 }
 
-.credits ul {
+.menu-screen ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -68,32 +68,32 @@ body,
     border-radius: 10px;
 }
 
-.credits button:hover {
+.menu-screen button:hover {
     background-color: white;
     color: black;
 }
 
-.credits .credit-label {
+.menu-screen .credit-label {
     font-size: 2.2rem;
     color: white;
 }
 
-.credits ul li {
+.menu-screen ul li {
     display: flex;
     justify-content: space-between;
 }
 
-.credits ul li .credit-label {
+.menu-screen ul li .credit-label {
     margin: 0;
 }
 
-.credits ul li .contributor-label {
+.menu-screen ul li .contributor-label {
     margin: 0;
     margin-bottom: 1rem;
     font-size: 1.4rem;
 }
 
-.credits ul li .contributor-label a {
+.menu-screen ul li .contributor-label a {
     color: white;
 }
 

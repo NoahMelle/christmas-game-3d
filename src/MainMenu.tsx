@@ -5,16 +5,28 @@ import React, { useState, Suspense } from "react";
 import Snowfall from "react-snowfall";
 import { Player } from "./assets/HomeScreenPlayer";
 import Credits from "./Credits";
+import Settings from "./assets/Settings";
+import styles from "./menu.module.scss";
 
 export enum MenuState {
     Menu,
+    Settings,
     Credits,
+}
+
+export interface PlayerColors {
+  p1: string,
+  p2: string
 }
 
 export default function EmptyScene({
     setScene,
+    playerColors,
+    setPlayerColors,
 }: {
     setScene: React.Dispatch<React.SetStateAction<number>>;
+    playerColors: PlayerColors;
+    setPlayerColors: React.Dispatch<React.SetStateAction<PlayerColors>>;
 }) {
     const [currentMenuState, setCurrentMenuState] = useState(MenuState.Menu);
 
@@ -50,9 +62,18 @@ export default function EmptyScene({
                     setScene={setScene}
                     setCurrentMenuState={setCurrentMenuState}
                 />
-            ) : currentMenuState === MenuState.Credits ? (
-                <Credits setCurrentMenuState={setCurrentMenuState} />
-            ) : null}
+            ) : (
+                <div className="menu-screen">
+                    {currentMenuState === MenuState.Credits ? (
+                        <Credits />
+                    ) : currentMenuState === MenuState.Settings ? (
+                        <Settings playerColors={playerColors} setPlayerColors={setPlayerColors} />
+                    ) : null}
+                    <button onClick={() => setCurrentMenuState(MenuState.Menu)}>
+                        Back
+                    </button>
+                </div>
+            )}
         </>
     );
 }
@@ -65,9 +86,14 @@ const Main = ({
     setCurrentMenuState: React.Dispatch<React.SetStateAction<MenuState>>;
 }) => {
     return (
-        <div className="main-menu">
+        <div className={styles.mainMenu}>
             <h1>GAME NAME</h1>
-            <button onClick={() => setScene(1)}>Play</button>
+            <button onClick={() => setScene(1)} className={styles.menuButton}>Play</button>
+            <MenuButton
+                label="Settings"
+                targetState={MenuState.Settings}
+                setCurrentMenuState={setCurrentMenuState}
+            />
             <MenuButton
                 label={"Credits"}
                 targetState={MenuState.Credits}
@@ -87,7 +113,7 @@ const MenuButton = ({
     setCurrentMenuState: React.Dispatch<React.SetStateAction<MenuState>>;
 }) => {
     return (
-        <button onClick={() => setCurrentMenuState(targetState)}>
+        <button onClick={() => setCurrentMenuState(targetState)} className={styles.menuButton}>
             {label}
         </button>
     );
