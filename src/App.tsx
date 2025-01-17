@@ -20,16 +20,40 @@ export default function App({
 }: {
     setScene: React.Dispatch<React.SetStateAction<number>>;
 }) {
-    const [score, setScore] = useState({ p1: 0, p2: 0 });
-    const [winner, setWinner] = useState<number | null>(null);
-    const [lastPuckReset, setLastPuckReset] = useState(Date.now());
-    const [currentGamemodeState, setCurrentGamemodeState] =
-        useState<GamemodeState | null>(null);
-    const maxPointsWinner = 5;
+  const [score, setScore] = useState({ p1: 0, p2: 0 });
+  const [winner, setWinner] = useState<number | null>(null);
+  const [lastPuckReset, setLastPuckReset] = useState(Date.now());
+  const [currentGamemodeState, setCurrentGamemodeState] =
+    useState<GamemodeState | null>(null);
+  const maxPointsWinner = 5;
+  const maxTimeWinner = 4 * 60000;
+  const [currentDate, setCurrentDate] = useState<Date | null>(
+    new Date(maxTimeWinner)
+  );
 
-    useEffect(() => {
-        console.log(score);
-        setLastPuckReset(Date.now());
+  useEffect(() => {
+    if (currentGamemodeState !== null) {
+      const newTargetDate = new Date(new Date().getTime() + maxTimeWinner);
+
+      const interval = setInterval(() => {
+        setCurrentDate(
+          new Date(newTargetDate.getTime() - new Date().getTime())
+        );
+
+        if (new Date().getTime() >= newTargetDate.getTime()) {
+          setWinner(score.p1 === score.p2 ? 3 : score.p1 > score.p2 ? 1 : 2);
+          setCurrentGamemodeState(GamemodeState.Winner);
+
+          clearInterval(interval);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [currentGamemodeState]);
+
+  useEffect(() => {
+    setLastPuckReset(Date.now());
 
         if (currentGamemodeState === GamemodeState.Points) {
             if (score.p1 >= maxPointsWinner || score.p2 >= maxPointsWinner) {
@@ -56,56 +80,73 @@ export default function App({
                             targetState={GamemodeState.Minutes}
                             setCurrentGamemodeState={setCurrentGamemodeState}
                         />
-
-                        <GamemodeButton
-                            label={"Points"}
-                            targetState={GamemodeState.Points}
-                            setCurrentGamemodeState={setCurrentGamemodeState}
-                        />
-                    </div>
-                ) : null}
-                {currentGamemodeState === GamemodeState.Points ? (
-                    <div className="score">
-                        <h1>
-                            {score.p1} - {score.p2}
-                        </h1>
-                    </div>
-                ) : null}
-                {winner !== null ? (
-                    <div className="win-screen">
-                        <h2>Player: {winner} is the winner!</h2>
-                        <button
-                            onClick={() => {
-                                setScene(MenuState.Menu);
-                            }}
-                        >
-                            Back
-                        </button>
-                    </div>
-                ) : null}
-                <Canvas
-                    style={{
-                        filter:
-                            currentGamemodeState === null || winner !== null
-                                ? "blur(10px)"
-                                : "",
-                    }}
-                >
-                    <Scene
-                        score={score}
-                        setScore={setScore}
-                        lastPuckReset={lastPuckReset}
-                        setLastPuckReset={setLastPuckReset}
-                        gameStarted={
-                            currentGamemodeState === GamemodeState.Winner
-                                ? false
-                                : currentGamemodeState !== null
-                        }
-                    />
-                </Canvas>
-            </LoadingWrapper>
-        </>
-    );
+            <GamemodeButton
+              label={"Points"}
+              targetState={GamemodeState.Points}
+              setCurrentGamemodeState={setCurrentGamemodeState}
+            />
+          </div>
+        ) : null}
+        {currentGamemodeState === GamemodeState.Points ? (
+          <div className="score">
+            <h1>
+              {score.p1} - {score.p2}
+            </h1>
+          </div>
+        ) : currentGamemodeState === GamemodeState.Minutes ? (
+          <div className="score">
+            <h1>
+              {score.p1}
+              {" - "}
+              {currentDate
+                ? `${Math.floor(
+                    (currentDate.getTime() / 60000) % 60
+                  )}:${Math.floor((currentDate.getTime() / 1000) % 60)
+                    .toString()
+                    .padStart(2, "0")}`
+                : "0:00"}
+              {" - "}
+              {score.p2}
+            </h1>
+          </div>
+        ) : null}
+        {winner !== null ? (
+          <div className="win-screen">
+            <h2>
+              {winner !== 3 ? `Player ${winner} is the winner!` : `Draw...`}
+            </h2>
+            <button
+              onClick={() => {
+                setScene(MenuState.Menu);
+              }}
+            >
+              Back
+            </button>
+          </div>
+        ) : null}
+        <Canvas
+          style={{
+            filter:
+              currentGamemodeState === null || winner !== null
+                ? "blur(10px)"
+                : "",
+          }}
+        >
+          <Scene
+            score={score}
+            setScore={setScore}
+            lastPuckReset={lastPuckReset}
+            setLastPuckReset={setLastPuckReset}
+            gameStarted={
+              currentGamemodeState === GamemodeState.Winner
+                ? false
+                : currentGamemodeState !== null
+            }
+          />
+        </Canvas>
+      </LoadingWrapper>
+    </>
+  );
 }
 
 const GamemodeButton = ({
