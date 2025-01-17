@@ -10,26 +10,24 @@ export default function Settings({
     playerColors: PlayerColors;
     setPlayerColors: React.Dispatch<SetStateAction<PlayerColors>>;
 }>) {
-    const handleColorChange = (e: React.FormEvent, player: string) => {
-        setPlayerColors((prev) => ({
-            ...prev,
-            [player]: (e.target as HTMLInputElement).value,
-        }));
-    };
-
     return (
         <div className={styles.settings}>
-            <input
-                type="color"
-                value={playerColors.p1}
-                onChange={(e) => handleColorChange(e, "p1")}
-            />
-            <input
-                type="color"
-                value={playerColors.p2}
-                onChange={(e) => handleColorChange(e, "p2")}
-            />
-            <ColorPicker />
+            <div className={styles.settingGroup}>
+                P1 Color
+                <ColorPicker
+                    setPlayerColors={setPlayerColors}
+                    player="p1"
+                    playerColors={playerColors}
+                />
+            </div>
+            <div className={styles.settingGroup}>
+            P2 Color
+                <ColorPicker
+                    setPlayerColors={setPlayerColors}
+                    player="p2"
+                    playerColors={playerColors}
+                />
+            </div>
         </div>
     );
 }

@@ -33,8 +33,8 @@ enum GameScene {
 function Main() {
     const [scene, setScene] = useState(GameScene.Menu);
     const [playerColors, setPlayerColors] = useState({
-        p1: "#FF0000",
-        p2: "#0000FF",
+        p1: "blue",
+        p2: "red",
     });
 
     return (

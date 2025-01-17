@@ -1,53 +1,41 @@
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
 import styles from "../menu.module.scss";
+import { PlayerColors } from "../MainMenu";
 
-const ColorPicker = () => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
-    const [currentColor, setCurrentColor] = useState(""); 
-
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
-
+const ColorPicker = ({
+    setPlayerColors,
+    player,
+    playerColors,
+}: {
+    setPlayerColors: React.Dispatch<React.SetStateAction<PlayerColors>>;
+    player: "p1" | "p2";
+    playerColors: PlayerColors;
+}) => {
     const toggleColor = (color: string) => {
-        setCurrentColor(color);
-        setIsDropdownOpen(false);
+        setPlayerColors((prev) => ({
+            ...prev,
+            [player]: color,
+        }));
     };
 
     return (
         <div className={styles.colorPicker}>
-            <div className={styles.topContainer}>
-                <div
-                    className={`${styles.ball} ${styles.current}`}
-                    data-color={currentColor}
-                    style={{ backgroundColor: currentColor }}
-                ></div>
-                <button onClick={toggleDropdown}>
-                    <ChevronDown />
-                </button>
+            <div className={styles.balls}>
+                {["red", "orange", "yellow", "green", "blue", "purple"].map(
+                    (color) => (
+                        <button
+                            key={color}
+                            className={
+                                styles.ball +
+                                " " +
+                                (playerColors[player] === color &&
+                                    styles.selected)
+                            }
+                            style={{ backgroundColor: color }}
+                            onClick={() => toggleColor(color)}
+                        ></button>
+                    )
+                )}
             </div>
-            {isDropdownOpen && (
-                <div className={styles.popup}>
-                    <div className={styles.balls}>
-                        {[
-                            "red",
-                            "orange",
-                            "yellow",
-                            "green",
-                            "blue",
-                            "purple",
-                        ].map((color) => (
-                            <button
-                                key={color}
-                                className={"ball" + color}
-                                style={{ backgroundColor: color }}
-                                onClick={() => toggleColor(color)}
-                            ></button>
-                        ))}
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

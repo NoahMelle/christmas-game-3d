@@ -5,20 +5,20 @@ import Snowfall from "react-snowfall";
 import Scene from "./Scene";
 
 enum GamemodeState {
-  Minutes,
-  Points,
-  Winner,
+    Minutes,
+    Points,
+    Winner,
 }
 
 export enum MenuState {
-  Menu,
-  Credits,
+    Menu,
+    Credits,
 }
 
 export default function App({
-  setScene,
+    setScene,
 }: {
-  setScene: React.Dispatch<React.SetStateAction<number>>;
+    setScene: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [score, setScore] = useState({ p1: 0, p2: 0 });
   const [winner, setWinner] = useState<number | null>(null);
@@ -55,32 +55,31 @@ export default function App({
   useEffect(() => {
     setLastPuckReset(Date.now());
 
-    if (currentGamemodeState === GamemodeState.Points) {
-      if (score.p1 >= maxPointsWinner || score.p2 >= maxPointsWinner) {
-        setWinner(score.p1 > score.p2 ? 1 : 2);
-        setCurrentGamemodeState(GamemodeState.Winner);
-      }
-    }
-  }, [score]);
+        if (currentGamemodeState === GamemodeState.Points) {
+            if (score.p1 >= maxPointsWinner || score.p2 >= maxPointsWinner) {
+                setWinner(score.p1 > score.p2 ? 1 : 2);
+                setCurrentGamemodeState(GamemodeState.Winner);
+            }
+        }
+    }, [score]);
 
-  return (
-    <>
-      <Snowfall
-        color="rgba(255, 255, 255, 0.4)"
-        style={{
-          width: "100vw",
-          height: "100vh",
-        }}
-      />
-      <LoadingWrapper>
-        {currentGamemodeState === null ? (
-          <div className="gamemode-chooser">
-            <GamemodeButton
-              label={"Minutes"}
-              targetState={GamemodeState.Minutes}
-              setCurrentGamemodeState={setCurrentGamemodeState}
+    return (
+        <>
+            <Snowfall
+                color="rgba(255, 255, 255, 0.4)"
+                style={{
+                    width: "100vw",
+                    height: "100vh",
+                }}
             />
-
+            <LoadingWrapper>
+                {currentGamemodeState === null ? (
+                    <div className="gamemode-chooser">
+                        <GamemodeButton
+                            label={"Minutes"}
+                            targetState={GamemodeState.Minutes}
+                            setCurrentGamemodeState={setCurrentGamemodeState}
+                        />
             <GamemodeButton
               label={"Points"}
               targetState={GamemodeState.Points}
@@ -151,22 +150,22 @@ export default function App({
 }
 
 const GamemodeButton = ({
-  label,
-  targetState,
-  setCurrentGamemodeState,
+    label,
+    targetState,
+    setCurrentGamemodeState,
 }: {
-  label: string;
-  targetState: GamemodeState;
-  setCurrentGamemodeState: React.Dispatch<
-    React.SetStateAction<GamemodeState | null>
-  >;
+    label: string;
+    targetState: GamemodeState;
+    setCurrentGamemodeState: React.Dispatch<
+        React.SetStateAction<GamemodeState | null>
+    >;
 }) => {
-  return (
-    <button
-      className="gamemode-chooser-button"
-      onClick={() => setCurrentGamemodeState(targetState)}
-    >
-      {label}
-    </button>
-  );
+    return (
+        <button
+            className="gamemode-chooser-button"
+            onClick={() => setCurrentGamemodeState(targetState)}
+        >
+            {label}
+        </button>
+    );
 };
