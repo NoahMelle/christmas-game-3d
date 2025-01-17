@@ -5,7 +5,7 @@ import Snowfall from "react-snowfall";
 import Scene from "./Scene";
 
 export default function App() {
-        const [score, setScore] = useState({ p1: 0, p2: 0 });
+    const [score, setScore] = useState({ p1: 0, p2: 0 });
     const [lastPuckReset, setLastPuckReset] = useState(Date.now());
 
     useEffect(() => {
