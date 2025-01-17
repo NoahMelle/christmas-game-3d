@@ -38,13 +38,7 @@ function Main() {
         <StrictMode>
             <KeyboardControls map={keyboardMap}>
                 {scene != GameScene.Game ? (
-                    <>
-                        {scene === GameScene.Menu ? (
-                            <MainMenu setScene={setScene} />
-                        ) : (
-                            <Credits setScene={setScene} />
-                        )}
-                    </>
+                    <MainMenu setScene={setScene} />
                 ) : (
                     <App />
                 )}

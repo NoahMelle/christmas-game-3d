@@ -4,8 +4,9 @@ import { Physics } from "@react-three/rapier";
 import React, { useState, Suspense } from "react";
 import Snowfall from "react-snowfall";
 import { Player } from "./assets/HomeScreenPlayer";
+import Credits from "./Credits";
 
-enum MenuState {
+export enum MenuState {
     Menu,
     Credits,
 }
@@ -13,7 +14,7 @@ enum MenuState {
 export default function EmptyScene({
     setScene,
 }: {
-    setScene: (scene: number) => void;
+    setScene: React.Dispatch<React.SetStateAction<number>>;
 }) {
     const [currentMenuState, setCurrentMenuState] = useState(MenuState.Menu);
 
@@ -44,23 +45,37 @@ export default function EmptyScene({
                 </Canvas>
             </Suspense>
             <Snowfall color="rgba(255, 255, 255, 0.4)" />
-            <div className="main-menu">
-                <h1>GAME NAME</h1>
-                <button onClick={() => setScene(2)}>
-                    <p>Play</p>
-                </button>
-                <button onClick={() => setScene(1)}>
-                    <p>Credits</p>
-                </button>
-                <MenuButton
-                    label={"Credits"}
-                    targetState={MenuState.Credits}
+            {currentMenuState === MenuState.Menu ? (
+                <Main
+                    setScene={setScene}
                     setCurrentMenuState={setCurrentMenuState}
                 />
-            </div>
+            ) : currentMenuState === MenuState.Credits ? (
+                <Credits setCurrentMenuState={setCurrentMenuState} />
+            ) : null}
         </>
     );
 }
+
+const Main = ({
+    setScene,
+    setCurrentMenuState,
+}: {
+    setScene: React.Dispatch<React.SetStateAction<number>>;
+    setCurrentMenuState: React.Dispatch<React.SetStateAction<MenuState>>;
+}) => {
+    return (
+        <div className="main-menu">
+            <h1>GAME NAME</h1>
+            <button onClick={() => setScene(1)}>Play</button>
+            <MenuButton
+                label={"Credits"}
+                targetState={MenuState.Credits}
+                setCurrentMenuState={setCurrentMenuState}
+            />
+        </div>
+    );
+};
 
 const MenuButton = ({
     label,
