@@ -2,6 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { useEffect, useState } from "react";
 import LoadingWrapper from "./components/LoadingWrapper";
 import Snowfall from "react-snowfall";
+import { PlayerColors } from "./MainMenu";
 import Scene from "./Scene";
 
 enum GamemodeState {
@@ -17,8 +18,10 @@ export enum MenuState {
 
 export default function App({
     setScene,
+    playerColors
 }: {
     setScene: React.Dispatch<React.SetStateAction<number>>;
+    playerColors: PlayerColors
 }) {
   const [score, setScore] = useState({ p1: 0, p2: 0 });
   const [winner, setWinner] = useState<number | null>(null);
@@ -142,6 +145,7 @@ export default function App({
                 ? false
                 : currentGamemodeState !== null
             }
+            playerColors={playerColors}
           />
         </Canvas>
       </LoadingWrapper>
