@@ -91,7 +91,7 @@ export default function Scene({
     <>
       <CameraControls makeDefault ref={cameraControlRef} />
       <Environment
-        preset="forest"
+        preset="city"
         environmentIntensity={0.3}
         environmentRotation={[0, degToRad(45), 0]}
       />
