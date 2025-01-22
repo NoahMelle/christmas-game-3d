@@ -117,7 +117,7 @@ export function Player({
       );
 
       // Smooth rotation towards movement direction
-      const targetRotation = Math.atan2(-impulse.x, -impulse.z);
+      const targetRotation = Math.atan2(impulse.x, impulse.z);
       const targetQuaternion = new THREE.Quaternion().setFromAxisAngle(
         new THREE.Vector3(0, 1, 0),
         targetRotation
