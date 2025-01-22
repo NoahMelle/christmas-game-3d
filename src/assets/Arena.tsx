@@ -18,7 +18,7 @@ type GLTFResult = GLTF & {
 
 export function Arena(props: JSX.IntrinsicElements["group"]) {
   const group = useRef<THREE.Group>(null);
-  const { nodes, materials } = useGLTF("/arena.glb") as GLTFResult;
+  const { nodes } = useGLTF("/arena.glb") as GLTFResult;
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
@@ -27,7 +27,7 @@ export function Arena(props: JSX.IntrinsicElements["group"]) {
           castShadow
           receiveShadow
           geometry={nodes.Cube001.geometry}
-          material={materials["Material.007"]}
+          material={new THREE.MeshStandardMaterial({ color: "lightblue" })}
         />
       </group>
     </group>
