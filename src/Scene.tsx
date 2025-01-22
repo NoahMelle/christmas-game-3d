@@ -10,7 +10,7 @@ import { Goal } from "./assets/Goal";
 import { PlayerColors } from "./MainMenu";
 import { degToRad } from "three/src/math/MathUtils.js";
 import { useControls } from "leva";
-import { Crowder } from "./assets/Crowder";
+import Crowd from "./assets/Crowd";
 import { Trees } from "./assets/Trees";
 import { Arena } from "./assets/Arena";
 
@@ -97,7 +97,7 @@ export default function Scene({
       />
       <Physics debug={debugPhysics}>
         <Trees />
-        <Crowder />
+        <Crowd />
         <Arena />
         <Rink
           lookPosLeft={lookPosLeft}
