@@ -7,70 +7,68 @@ import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import React, { useEffect } from "react";
 import {
-  CylinderCollider,
-  RapierRigidBody,
-  RigidBody,
+    CylinderCollider,
+    RapierRigidBody,
+    RigidBody,
 } from "@react-three/rapier";
 
 type GLTFResult = GLTF & {
-  nodes: {
-    Cylinder: THREE.Mesh;
-  };
-  materials: {
-    ["Material.001"]: THREE.MeshStandardMaterial;
-  };
+    nodes: {
+        Cylinder: THREE.Mesh;
+    };
+    materials: {
+        ["Material.001"]: THREE.MeshStandardMaterial;
+    };
 };
 
 export function Puck({
-  innerRef,
-  lastPuckReset,
-  gameStarted,
-  ...props
-}: {
-  innerRef: React.RefObject<RapierRigidBody>;
-  gameStarted: boolean;
-  lastPuckReset: number;
-}) {
-  const { nodes, materials } = useGLTF("/puck.glb") as GLTFResult;
+    innerRef,
+    lastPuckReset,
+    gameStarted,
+    ...props
+}: Readonly<{
+    innerRef: React.RefObject<RapierRigidBody>;
+    gameStarted: boolean;
+    lastPuckReset: number;
+}>) {
+    const { nodes, materials } = useGLTF("/puck.glb") as GLTFResult;
 
-  useEffect(() => {
-    if (innerRef.current) {
-      console.log("lastPuckReset", lastPuckReset);
-      innerRef.current.setTranslation({ x: 0, y: 0, z: 0 }, true);
-      innerRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
-      innerRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
-    }
-  }, [lastPuckReset]);
+    useEffect(() => {
+        if (innerRef.current) {
+            console.log("lastPuckReset", lastPuckReset);
+            innerRef.current.setTranslation({ x: 0, y: 0, z: 0 }, true);
+            innerRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+            innerRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
+        }
+    }, [lastPuckReset]);
 
-  return (
-    <RigidBody
-      mass={0.1}
-      type="dynamic"
-      friction={0.1}
-      restitution={1.5}
-      enabledRotations={[false, false, false]}
-      enabledTranslations={[true, false, true]}
-      ref={innerRef}
-      colliders={false}
-      ccd={true}
-    >
-      <group
-        {...props}
-        dispose={null}
-        position={[0, 0.8, 0]}
-        userData={{ type: "puck" }}
-      >
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cylinder.geometry}
-          material={materials["Material.001"]}
-          scale={2.499}
-        />
-        <CylinderCollider position={[0, 0, 0]} args={[0.08, 0.4]} />
-      </group>
-    </RigidBody>
-  );
+    return (
+        <RigidBody
+            restitution={1.5}
+            enabledRotations={[false, false, false]}
+            enabledTranslations={[true, false, true]}
+            ref={innerRef}
+            colliders={false}
+            softCcdPrediction={0.001}
+            density={1}
+        >
+            <group
+                {...props}
+                dispose={null}
+                position={[0, 0.8, 0]}
+                userData={{ type: "puck" }}
+            >
+                <mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.Cylinder.geometry}
+                    material={materials["Material.001"]}
+                    scale={2.499}
+                />
+                <CylinderCollider position={[0, 0, 0]} args={[0.08, 0.4]} />
+            </group>
+        </RigidBody>
+    );
 }
 
 useGLTF.preload("/puck.glb");

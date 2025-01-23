@@ -39,7 +39,7 @@ export function Goal({
 }>) {
     const { nodes, materials } = useGLTF("/goal.glb") as GLTFResult;
 
-    const COLLIDER_OFFSET = 0.1;
+    const COLLIDER_OFFSET = 0.4;
 
     const handleIntersectionEnter = (e: CollisionPayload) => {
         const parent = e.colliderObject?.parent;
@@ -53,7 +53,6 @@ export function Goal({
         const userData = parent.userData as { type: string };
 
         if (userData.type === "puck") {
-            console.log("goal!");
             setScore((prev: { p1: number; p2: number }) => ({
                 ...prev,
                 [player]: prev[player] + 1,
@@ -110,12 +109,16 @@ export function Goal({
                     position={[0, 0.114, 0.011]}
                     rotation={[0, 0, -Math.PI / 2]}
                 />
+
+                {/* Collider for the goal */}
                 <CuboidCollider
                     args={[2 - COLLIDER_OFFSET, 1, 0]}
                     sensor
                     position={[0, 0, 0.5]}
                     onIntersectionEnter={handleIntersectionEnter}
                 />
+
+                {/* Colliders for the goal posts */}
                 <CuboidCollider args={[0.1, 1, 1]} position={[1.95, 0, 0]} />
                 <CuboidCollider args={[0.1, 1, 1]} position={[-1.95, 0, 0]} />
                 <CuboidCollider args={[2.01, 1, 0.1]} position={[0, 0, -1]} />
