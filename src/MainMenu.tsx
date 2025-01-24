@@ -9,9 +9,9 @@ import Settings from "./assets/Settings";
 import styles from "./menu.module.scss";
 
 export enum MenuState {
-  Menu,
-  Settings,
-  Credits,
+    Menu,
+    Settings,
+    Credits,
 }
 
 export interface PlayerColors {
@@ -20,26 +20,30 @@ export interface PlayerColors {
 }
 
 export default function EmptyScene({
-  setScene,
-  playerColors,
-  setPlayerColors,
+    setScene,
+    playerColors,
+    setPlayerColors,
+    isCrowdDisabled,
+    setIsCrowdDisabled,
 }: {
-  setScene: React.Dispatch<React.SetStateAction<number>>;
-  playerColors: PlayerColors;
-  setPlayerColors: React.Dispatch<React.SetStateAction<PlayerColors>>;
+    setScene: React.Dispatch<React.SetStateAction<number>>;
+    playerColors: PlayerColors;
+    setPlayerColors: React.Dispatch<React.SetStateAction<PlayerColors>>;
+    isCrowdDisabled: boolean;
+    setIsCrowdDisabled: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [currentMenuState, setCurrentMenuState] = useState(MenuState.Menu);
+    const [currentMenuState, setCurrentMenuState] = useState(MenuState.Menu);
 
-  return (
-    <>
-      <Suspense fallback={null}>
-        <Canvas camera={{ position: [0, 10, 0], fov: 50 }}>
-          <RotateCamera />
+    return (
+        <>
+            <Suspense fallback={null}>
+                <Canvas camera={{ position: [0, 10, 0], fov: 50 }}>
+                    <RotateCamera />
 
-          <ambientLight intensity={0.3} />
-          <directionalLight position={[10, 10, 10]} intensity={0.5} />
+                    <ambientLight intensity={0.3} />
+                    <directionalLight position={[10, 10, 10]} intensity={0.5} />
 
-          <Environment preset="night" background={false} />
+                    <Environment preset="night" background={false} />
                     <Grid
                         position={[0, 0, 0]}
                         sectionSize={1}
@@ -70,6 +74,8 @@ export default function EmptyScene({
                             <Settings
                                 playerColors={playerColors}
                                 setPlayerColors={setPlayerColors}
+                                isCrowdDisabled={isCrowdDisabled}
+                                setIsCrowdDisabled={setIsCrowdDisabled}
                             />
                         ) : null}
                         <button
@@ -86,11 +92,11 @@ export default function EmptyScene({
 }
 
 const Main = ({
-  setScene,
-  setCurrentMenuState,
+    setScene,
+    setCurrentMenuState,
 }: {
-  setScene: React.Dispatch<React.SetStateAction<number>>;
-  setCurrentMenuState: React.Dispatch<React.SetStateAction<MenuState>>;
+    setScene: React.Dispatch<React.SetStateAction<number>>;
+    setCurrentMenuState: React.Dispatch<React.SetStateAction<MenuState>>;
 }) => {
     return (
         <div className={styles.mainMenu}>
@@ -113,13 +119,13 @@ const Main = ({
 };
 
 const MenuButton = ({
-  label,
-  targetState,
-  setCurrentMenuState,
+    label,
+    targetState,
+    setCurrentMenuState,
 }: {
-  label: string;
-  targetState: MenuState;
-  setCurrentMenuState: React.Dispatch<React.SetStateAction<MenuState>>;
+    label: string;
+    targetState: MenuState;
+    setCurrentMenuState: React.Dispatch<React.SetStateAction<MenuState>>;
 }) => {
     return (
         <button
@@ -132,9 +138,9 @@ const MenuButton = ({
 };
 
 function RotateCamera() {
-  useFrame((state, deltaTime) => {
-    state.camera.rotateZ(deltaTime * 0.2);
-  });
+    useFrame((state, deltaTime) => {
+        state.camera.rotateZ(deltaTime * 0.2);
+    });
 
-  return null;
+    return null;
 }

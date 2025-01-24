@@ -1,4 +1,4 @@
-import { StrictMode, useState } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
@@ -36,6 +36,23 @@ function Main() {
         p1: "blue",
         p2: "red",
     });
+    const [isCrowdDisabled, setIsCrowdDisabled] = useState(false);
+
+    useEffect(() => {
+        if (isCrowdDisabled) {
+            localStorage.setItem(
+                "crowdDisabled",
+                JSON.stringify(isCrowdDisabled)
+            );
+        }
+    }, [isCrowdDisabled]);
+
+    useEffect(() => {
+        const crowdDisabledLocalStorage = localStorage.getItem("crowdDisabled");
+        if (crowdDisabledLocalStorage) {
+            setIsCrowdDisabled(JSON.parse(crowdDisabledLocalStorage));
+        }
+    }, []);
 
     return (
         <StrictMode>
@@ -45,9 +62,15 @@ function Main() {
                         setScene={setScene}
                         playerColors={playerColors}
                         setPlayerColors={setPlayerColors}
+                        isCrowdDisabled={isCrowdDisabled}
+                        setIsCrowdDisabled={setIsCrowdDisabled}
                     />
                 ) : (
-                    <App setScene={setScene} playerColors={playerColors} />
+                    <App
+                        setScene={setScene}
+                        playerColors={playerColors}
+                        isCrowdDisabled={isCrowdDisabled}
+                    />
                 )}
             </KeyboardControls>
         </StrictMode>

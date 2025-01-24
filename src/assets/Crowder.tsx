@@ -36,13 +36,13 @@ export function Crowder(
 
     const randomSineOffset = Math.random() * Math.PI * 2;
 
-    useFrame((_, dt) => {
+    useFrame(() => {
         if (!bobbingRef.current) {
             return;
         }
 
         bobbingRef.current.position.y =
-            (Math.sin(randomSineOffset + performance.now() / 400) + 1) * 0.1;
+            (Math.sin(randomSineOffset + performance.now() / 200) + 1) * 0.15;
     });
 
     // Ensure geometry is centered and pivot is at the object's local origin
