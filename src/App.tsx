@@ -4,6 +4,7 @@ import LoadingWrapper from "./components/LoadingWrapper";
 import Snowfall from "react-snowfall";
 import { PlayerColors } from "./MainMenu";
 import Scene from "./Scene";
+import Controls from "./components/Controls";
 import Timer from "./components/Timer";
 
 enum GamemodeState {
@@ -131,6 +132,7 @@ export default function App({
                 </div>
             ) : null}
             <LoadingWrapper>
+                <Controls />
                 <Canvas
                     style={{
                         filter:

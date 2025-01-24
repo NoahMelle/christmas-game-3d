@@ -1,0 +1,41 @@
+.controlsContainer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+    .keyboardLayout {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.4rem;
+        width: fit-content;
+    }
+
+    .controlButton {
+        aspect-ratio: 1/1;
+        border-radius: 0.4rem;
+        background-color: rgba($color: #ffffff, $alpha: 0.4);
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid white;
+    }
+}
+
+.playerControls {
+    display: flex;
+    align-items: end;
+    gap: 2rem;
+    .controlGroup {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .rotateButtons {
+        display: flex;
+        gap: 0.4rem;
+    }
+}
