@@ -9,7 +9,6 @@ import { useEffect, useRef } from "react";
 import { Goal } from "./assets/Goal";
 import { PlayerColors } from "./MainMenu";
 import { degToRad } from "three/src/math/MathUtils.js";
-import { useControls } from "leva";
 import Crowd from "./assets/Crowd";
 import { Trees } from "./assets/Trees";
 import { Arena } from "./assets/Arena";
@@ -39,13 +38,9 @@ export default function Scene({
     const lookPosRight = useRef(new Vector3());
     const rinkDimensions = useRef(new Vector3());
 
-    const { debugPhysics } = useControls({
-        debugPhysics: false,
-    });
-
-    const startingDistance = useRef(6);
-    const p1StartingPos = useRef(new Vector3(0, 2, startingDistance.current));
-    const p2StartingPos = useRef(new Vector3(0, 2, -startingDistance.current));
+  const startingDistance = useRef(6);
+  const p1StartingPos = useRef(new Vector3(0, 2, startingDistance.current));
+  const p2StartingPos = useRef(new Vector3(0, 2, -startingDistance.current));
 
     useFrame(() => {
         if (!puckRef.current) {
@@ -99,7 +94,7 @@ export default function Scene({
                 environmentIntensity={0.3}
                 environmentRotation={[0, degToRad(45), 0]}
             />
-            <Physics debug={debugPhysics}>
+            <Physics>
                 <Trees />
                 {!isCrowdDisabled && <Crowd />}
                 <Arena />
