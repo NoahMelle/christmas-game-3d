@@ -35,7 +35,6 @@ export function Puck({
 
     useEffect(() => {
         if (innerRef.current) {
-            console.log("lastPuckReset", lastPuckReset);
             innerRef.current.setTranslation({ x: 0, y: 0, z: 0 }, true);
             innerRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
             innerRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);

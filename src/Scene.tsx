@@ -82,7 +82,6 @@ export default function Scene({
     });
 
     useEffect(() => {
-        console.log(score);
         setLastPuckReset(Date.now());
     }, [score]);
 

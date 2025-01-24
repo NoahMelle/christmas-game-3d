@@ -57,8 +57,6 @@ export default function Rink({
             ((Math.sqrt(2) / 2) * (colliderThickness + cornerLength)) / 2,
     };
 
-    console.log(cornerDistances);
-
     return (
         <RigidBody
             type="fixed"

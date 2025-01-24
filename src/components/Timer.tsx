@@ -12,8 +12,6 @@ export default function Timer({
         undefined
     );
 
-    console.log("Rendering timer...")
-
     useEffect(() => {
         setTimeInterval(() =>
             setInterval(() => {

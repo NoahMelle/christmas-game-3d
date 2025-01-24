@@ -44,8 +44,6 @@ export function Goal({
     const handleIntersectionEnter = (e: CollisionPayload) => {
         const parent = e.colliderObject?.parent;
 
-        console.log(parent);
-
         if (!parent) {
             return;
         }
